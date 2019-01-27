@@ -14,8 +14,14 @@ class ApiTestCase(unittest.TestCase):
         datas = dapi.user_datas_from_id(199863)
         self.assertEqual(datas['name'], 'dynamonda')
 
+        datas = dapi.user_datas_from_id(452601)
+        self.assertEqual(datas['name'], 'さっとる◎')
+        
         with self.assertRaises(TypeError):
             dapi.user_datas_from_id("string")
+
+        datas = dapi.user_datas_from_id(9999999999)
+        self.assertEqual(datas['name'], 'NotFound')
 
 if __name__ == '__main__':
     unittest.main()
