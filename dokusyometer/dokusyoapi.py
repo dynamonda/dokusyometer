@@ -8,14 +8,16 @@ import requests_cache
 
 HEADERS = {'User-Agent': 'Mozilla/5.0'}
 
+def get_soup(url):
+    requests_cache.install_cache()
+    response = requests.get(url, headers=HEADERS)
+    soup = BeautifulSoup(response.text, 'lxml')
+    return soup
+
 def user_datas_from_id(id):
     if isinstance(id, int) == False:
         raise TypeError
-
-    requests_cache.install_cache()
-    url = 'https://bookmeter.com/users/'
-    response = requests.get(url + str(id), headers=HEADERS)
-    soup = BeautifulSoup(response.text, "lxml")
+    soup = get_soup('https://bookmeter.com/users/' + str(id))
     
     datas = {}
     if len(soup.find_all("header", class_="error__header")) > 0:
@@ -32,11 +34,8 @@ def user_datas_from_id(id):
 def read_books_from_user_id(id):
     if isinstance(id, int) == False:
         raise TypeError
-
-    requests_cache.install_cache()
     base_url = 'https://bookmeter.com/users/'+str(id)+'/books/read?page='
-    response = requests.get(base_url + str(1), headers=HEADERS)
-    soup = BeautifulSoup(response.text, 'lxml')
+    soup = get_soup(base_url + str(1))
 
     books_num = int(soup.find('div', class_='content__count').string)
     page_num = math.ceil(books_num / 20.0)
@@ -60,6 +59,13 @@ def read_books_from_user_id(id):
                     bookdic['review_id'] = re.search(r'([0-9]+)', href_review_id)
                 books.append(bookdic)
     return books
+
+def book_from_id(id):
+    if isinstance(id, int) == False:
+        raise TypeError
+
+    soup = get_soup('https://bookmeter.com/books/' + id)
+    
 
 def main():
     pass
