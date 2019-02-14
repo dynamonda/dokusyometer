@@ -63,7 +63,6 @@ def read_books_from_user_id(id):
 def book_from_id(id):
     if isinstance(id, int) == False:
         raise TypeError
-
     soup = get_soup('https://bookmeter.com/books/' + id)
     
 
