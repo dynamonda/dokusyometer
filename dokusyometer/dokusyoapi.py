@@ -20,9 +20,13 @@ def user_datas_from_id(id):
     datas = {}
     if len(soup.find_all("header", class_="error__header")) > 0:
         datas["name"] = "NotFound"
-    else:
-        item = soup.find("div", class_="userdata-side__name")
-        datas["name"] = item.string
+        return datas
+    
+    item = soup.find("div", class_="userdata-side__name")
+    datas["name"] = item.string
+    profile_dl = soup.find("dl", class_="bm-details-side")
+    readbooks = re.match(r'^[0-9]+', profile_dl.contents[5].text)
+    datas["readbook"] = int(readbooks.group(0))
     return datas
 
 def read_books_from_user_id(id):

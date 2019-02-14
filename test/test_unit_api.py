@@ -13,9 +13,11 @@ class ApiTestCase(unittest.TestCase):
     def test_user_datas_from_id_name(self):
         datas = dapi.user_datas_from_id(199863)
         self.assertEqual(datas['name'], 'dynamonda')
+        self.assertEqual(datas['readbook'], 409)
 
         datas = dapi.user_datas_from_id(452601)
         self.assertEqual(datas['name'], 'さっとる◎')
+        self.assertEqual(datas['readbook'], 712)
 
         with self.assertRaises(TypeError):
             dapi.user_datas_from_id("string")
